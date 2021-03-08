@@ -74,9 +74,11 @@ label {
 
 }
 .button-style{
-    background-color: rgba(0, 209, 0,0.1);
+    margin-top: 20px;
+    background-color: rgb(23, 129, 205);
     border-radius: 3px;
-    border: 1px rgba(0, 209, 0,1) solid !important;
-    height: 30px;
+    border: none;
     cursor: pointer;
+    padding: 10px 15px;
+    color: white;
 }
