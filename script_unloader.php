@@ -7,7 +7,7 @@ Plugin URI:
 
 Description: Een super geweldige plugin, die koffie zet, brood voor je klaar maakt & boven alles zorgt voor een super mega awesome website.
 
-Version: 1.2.1
+Version: 1.3
 
 Author: Jazzly Geyteman
 
@@ -29,20 +29,14 @@ function extra_post_info_menu()
     );
 }
 
-function add_plugin_stylesheet()
-{
-    wp_enqueue_style( 'style', plugins_url( '/addons/main.css', __FILE__ ));
-    wp_enqueue_script('script', plugins_url('/addons/script.js', __FILE__));
-}
-
-add_action('admin_print_styles', 'add_plugin_stylesheet');
-
-
 
 add_action('admin_menu', 'extra_post_info_menu');
 
 function Jazz_unloader()
 {
+    wp_enqueue_style( 'style', plugins_url( '/addons/main.css', __FILE__ ));
+    wp_enqueue_script('script', plugins_url('/addons/script.js', __FILE__));
+
     ?>
     <form action="" method="POST" id="398">
         <h1>Enable or Disable Avada Scripts</h1>
