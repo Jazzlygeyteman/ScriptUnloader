@@ -19,7 +19,7 @@ Text Domain: Amazing Unloader
 
 */
 
-//Opties pagina aanmaken binnen het wordpress menu
+//Opties pagina aanmaken binnen het wordpress menu.
 function extra_post_info_menu()
 {
     //Juiste properties mee geven, zodat het op de juiste plek met de juiste waardes word toegevoegd.
@@ -36,7 +36,7 @@ function extra_post_info_menu()
 //Functie aanroepen in binnen wordpress
 add_action('admin_menu', 'extra_post_info_menu');
 
-//Css en javascript inladen
+//Css, javascript en het form + nodige functies inladen.
 function Jazz_unloader()
 {
     wp_enqueue_style( 'style', plugins_url( '/addons/main.css', __FILE__ ));
@@ -621,6 +621,7 @@ register_activation_hook(__FILE__, 'my_plugin_create_db');
 //De activation hook van wordpress gebruiken, die zorgt dat als de plugin gedisabled word, de database tabel weer verwijdert word.
 register_deactivation_hook(__FILE__, 'delete_Deactivation');
 
+//Functie die database aanmaakt
 function my_plugin_create_db()
 {
     global $wpdb;
