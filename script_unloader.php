@@ -1,4 +1,6 @@
 <?php
+//Wordpress plugin informatie, dit word op de plugin pagina getoond.
+
 /*
 
 Plugin Name: Script unloader
@@ -17,8 +19,10 @@ Text Domain: Amazing Unloader
 
 */
 
+//Opties pagina aanmaken binnen het wordpress menu
 function extra_post_info_menu()
 {
+    //Juiste properties mee geven, zodat het op de juiste plek met de juiste waardes word toegevoegd.
     add_options_page(
         $page_title = 'Een geweldige script unloader',
         $menu_title = 'Script unloader',
@@ -29,21 +33,25 @@ function extra_post_info_menu()
     );
 }
 
-
+//Functie aanroepen in binnen wordpress
 add_action('admin_menu', 'extra_post_info_menu');
 
+//Css en javascript inladen
 function Jazz_unloader()
 {
     wp_enqueue_style( 'style', plugins_url( '/addons/main.css', __FILE__ ));
     wp_enqueue_script('script', plugins_url('/addons/script.js', __FILE__));
 
     ?>
-    <form action="" method="POST" id="398">
+
+    <form action="" method="POST">
         <h1>Enable or Disable Avada Scripts</h1>
         <div class="wrapper">
             <div class="container">
                 <?php
+                //Op de manier van wordpress een select statement aanroepen.
                     global $wpdb;
+                    //Wordpress voegt altijd een prefix toe aan alle tabellen.
                     $table_name = $wpdb->prefix . 'unload_script';
 
                     $results = $wpdb->get_results(
@@ -51,25 +59,31 @@ function Jazz_unloader()
                         "SELECT * FROM $table_name"
 
                     );
+                    //Foreach aanroepen zodat als de optie actief is met de juiste classes en style word ingeladen
                 foreach ($results as $row) {
+                    //kijken of het form gepost is of niet en vanuit daar de active value checken.
                     if($_POST[$row->active] == 'on' || $row->active == 1 ){echo "<div class='input-wrapper add'>";}else{echo "<div class='input-wrapper'>";}
 
                     if($_POST[$row->active] == 'on' || $row->active == 1){
+                        //String replacement toepassen zodat het er net wat netter uit ziet in het overzicht.
                         echo "<input type='checkbox' name='$row->id' checked class='active'><label>".str_replace('-', ' ', $row->scriptName)."</label></div>";
                     }else{
                         echo "<input type='checkbox' name='$row->id'><label>". str_replace('-', ' ', $row->scriptName)."</label></div>";
                     }
                 }
-
+                //Kijken of het form gepost word, zodat het geupdate kan worden naar de juiste waardes.
                 if ($_SERVER['REQUEST_METHOD'] = $_POST) {
                     foreach ($results as $row) {
+                        //Check of de checkbox aanstaat en die linken aan het id, zodat het form weet welke row geupdate moet worden.
                         $checked = $row->id;
+                        //Als de checkbox gechecked is, verander de waarde naar 1.
                         if (isset($_POST[$checked])) {
                             $wpdb->update($table_name, array(
                                 'active' => 1
                             ),
                                 array('id' => $row->id)
                             );
+                            //Als de checkbox niet gechecked is, of geunchecked word. Verander de waarde naar 0.
                         } else {
                             $wpdb->update($table_name, array(
                                 'active' => 0
@@ -93,7 +107,7 @@ function Jazz_unloader()
 function UnloadScripting()
 {
     global $wpdb;
-
+    //Op de wordpress manier weer een select aanroepen, maar deze keer word er gekeken naar welke actief in de database staat.
     $table_name = $wpdb->prefix . 'unload_script';
     $results = $wpdb->get_results(
 
@@ -102,9 +116,11 @@ function UnloadScripting()
 
     foreach ($results as $row) {
         $name = $row->scriptName;
-
+        //Door elke actieve optie heen loopen, zodat het juiste script ontkoppeld word.
         switch ($name) {
             case 'avada-comments':
+                //De switch zelf spreekt voorzich, alleen daarbinnen in word een functie aangemaakt,
+                //zodat deze op een nette manier worden uitgeladen.
                 function unloadAvadaComments()
                 {
                     Fusion_Dynamic_JS::deregister_script('avada-comments');
@@ -594,20 +610,21 @@ function UnloadScripting()
                 add_action('wp_enqueue_scripts', 'unloadVimeo');
                 break;
         }
-
-
     }
 }
-
+//De functie uitvoeren binnen de hele website. Hiermee worden alle scripts daarwerkelijk geunload.
 UnloadScripting();
 
+//De activation hook van wordpress gebruiken om een functie aan te roepen die de database tabel maakt.
 register_activation_hook(__FILE__, 'my_plugin_create_db');
 
+//De activation hook van wordpress gebruiken, die zorgt dat als de plugin gedisabled word, de database tabel weer verwijdert word.
 register_deactivation_hook(__FILE__, 'delete_Deactivation');
 
 function my_plugin_create_db()
 {
     global $wpdb;
+    //Op de wordpress manier een database tabel aanmaken.
     $charset_collate = $wpdb->get_charset_collate();
     $table_name = $wpdb->prefix . 'unload_script';
 
@@ -619,13 +636,17 @@ function my_plugin_create_db()
 		UNIQUE KEY id (id)
 	) $charset_collate;";
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+    //De daadwerkelijke query aanroepen en uitvoeren.
     dbDelta($sql);
+
+    //Op moment van activatie word deze functie aangeroepen, om de database ook daadwerkelijk te vullen.
     insert_onload();
 
 }
-
 function insert_onload()
 {
+    //Op de manier van wordpress een row vullen.
     global $wpdb;
     $table_name = $wpdb->prefix . 'unload_script';
     $wpdb->insert($table_name, array(
@@ -998,8 +1019,10 @@ function insert_onload()
 
 }
 
+//De deactivatie plugin. Op het moment dat de plugin gedeactivate word, laat deze geen data en andere rotzooi achter.
 function delete_Deactivation()
 {
+    //Op de manier van wordpress een droptable statement aanroepen.
     global $wpdb;
 
     $table_name = $wpdb->prefix . 'unload_script';
