@@ -18,7 +18,7 @@ window.onload = function () {
         })
     })
 
-        //De uncheck functie declareren
+    //De uncheck functie declareren
     function uncheckAll(e) {
         //zorgt er voor dat de button, het form niet vertuurd
         e.preventDefault();
@@ -64,6 +64,7 @@ window.onload = function () {
         //Voeg de click event doe, zodat als er geklikt word er daadwerkelijk wat gebeurt
         checkAll.addEventListener('click', uncheckAll);
     }
+
 //Voeg de click event doe, zodat als er geklikt word er daadwerkelijk wat gebeurt
     checkAll.addEventListener('click', checkHandler);
 }
