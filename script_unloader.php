@@ -33,42 +33,46 @@ function extra_post_info_menu()
     );
 }
 
-//Functie aanroepen in binnen wordpress
+//Functie aanroepen binnen wordpress
 add_action('admin_menu', 'extra_post_info_menu');
 
-//Css, javascript en het form + nodige functies inladen.
+//Css, javascript inladen.
 function Jazz_unloader()
 {
-    wp_enqueue_style( 'style', plugins_url( '/addons/main.css', __FILE__ ));
+    wp_enqueue_style('style', plugins_url('/addons/main.css', __FILE__));
     wp_enqueue_script('script', plugins_url('/addons/script.js', __FILE__));
 
     ?>
-
+    <!--Form inladen met php functies er in -->
     <form action="" method="POST">
         <h1>Enable or Disable Avada Scripts</h1>
         <div class="wrapper">
             <div class="container">
                 <?php
                 //Op de manier van wordpress een select statement aanroepen.
-                    global $wpdb;
-                    //Wordpress voegt altijd een prefix toe aan alle tabellen.
-                    $table_name = $wpdb->prefix . 'unload_script';
+                global $wpdb;
+                //Wordpress voegt altijd een prefix toe aan alle tabellen.
+                $table_name = $wpdb->prefix . 'unload_script';
 
-                    $results = $wpdb->get_results(
+                $results = $wpdb->get_results(
 
-                        "SELECT * FROM $table_name"
+                    "SELECT * FROM $table_name"
 
-                    );
-                    //Foreach aanroepen zodat als de optie actief is met de juiste classes en style word ingeladen
+                );
+                //Foreach aanroepen zodat als de optie actief is met de juiste classes en style word ingeladen
                 foreach ($results as $row) {
                     //kijken of het form gepost is of niet en vanuit daar de active value checken.
-                    if($_POST[$row->active] == 'on' || $row->active == 1 ){echo "<div class='input-wrapper add'>";}else{echo "<div class='input-wrapper'>";}
+                    if ($_POST[$row->active] == 'on' || $row->active == 1) {
+                        echo "<div class='input-wrapper add'>";
+                    } else {
+                        echo "<div class='input-wrapper'>";
+                    }
 
-                    if($_POST[$row->active] == 'on' || $row->active == 1){
+                    if ($_POST[$row->active] == 'on' || $row->active == 1) {
                         //String replacement toepassen zodat het er net wat netter uit ziet in het overzicht.
-                        echo "<input type='checkbox' name='$row->id' checked class='active'><label>".str_replace('-', ' ', $row->scriptName)."</label></div>";
-                    }else{
-                        echo "<input type='checkbox' name='$row->id'><label>". str_replace('-', ' ', $row->scriptName)."</label></div>";
+                        echo "<input type='checkbox' name='$row->id' checked class='active'><label>" . str_replace('-', ' ', $row->scriptName) . "</label></div>";
+                    } else {
+                        echo "<input type='checkbox' name='$row->id'><label>" . str_replace('-', ' ', $row->scriptName) . "</label></div>";
                     }
                 }
                 //Kijken of het form gepost word, zodat het geupdate kan worden naar de juiste waardes.
@@ -96,14 +100,15 @@ function Jazz_unloader()
 
                 ?>
                 <div class="btns">
-                <button class="button-style" onclick="" name='submit' type="submit">Save settings</button>
-                <button class="checkbox-toggle button-style">Check all</button>
+                    <button class="button-style" onclick="" name='submit' type="submit">Save settings</button>
+                    <button class="checkbox-toggle button-style">Check all</button>
                 </div>
             </div>
         </div>
     </form>
     <?php
 }
+
 function UnloadScripting()
 {
     global $wpdb;
@@ -612,6 +617,7 @@ function UnloadScripting()
         }
     }
 }
+
 //De functie uitvoeren binnen de hele website. Hiermee worden alle scripts daarwerkelijk geunload.
 UnloadScripting();
 
@@ -645,6 +651,7 @@ function my_plugin_create_db()
     insert_onload();
 
 }
+
 function insert_onload()
 {
     //Op de manier van wordpress een row vullen.
