@@ -9,7 +9,7 @@ Plugin URI:
 
 Description: Een super geweldige plugin, die koffie zet, brood voor je klaar maakt & boven alles zorgt voor een super mega awesome website.
 
-Version: 1.3
+Version: 1.4
 
 Author: Jazzly Geyteman
 
