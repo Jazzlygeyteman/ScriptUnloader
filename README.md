@@ -1,2 +1,2 @@
 # Avada ScriptUnloader
-This is an scriptunloader for all the unwanted scripts from avada.
+This is an script unloader for all the unwanted scripts from avada.
